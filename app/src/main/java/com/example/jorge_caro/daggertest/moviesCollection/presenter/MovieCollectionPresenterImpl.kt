@@ -1,5 +1,6 @@
 package com.example.jorge_caro.daggertest.moviesCollection.presenter
 
+import android.util.Log
 import android.widget.ImageView
 import com.example.jorge_caro.daggertest.moviesCollection.interactor.MovieCollectionInteractor
 import com.example.jorge_caro.daggertest.moviesCollection.MoviesCollectionContract
@@ -14,6 +15,7 @@ class MovieCollectionPresenterImpl(private val interactor: MovieCollectionIntera
     private var view: MoviesCollectionContract.View? = null
     private lateinit var subscription: Subscription
     private lateinit var specification: MovieCollectionSpecification
+    var isAsyncRequestDone = false
 
 
     override fun loadResult() {
@@ -24,6 +26,7 @@ class MovieCollectionPresenterImpl(private val interactor: MovieCollectionIntera
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ result ->
                         view!!.refresh(result)
+                        isAsyncRequestDone = true
                     }, { _->
                                 view!!.showMessageError()
                             }
